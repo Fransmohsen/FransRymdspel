@@ -12,6 +12,7 @@ namespace FransRymdspel
     {
         protected Texture2D texture;
         protected Vector2 vector;
+        protected float angle = 0;
 
 
         //konstruktor för att skapa objekt

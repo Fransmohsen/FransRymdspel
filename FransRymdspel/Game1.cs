@@ -69,7 +69,7 @@ namespace FransRymdspel
                     tmpSprite.Width);
 
                 int rndY = random.Next(0, Window.ClientBounds.Height / 2);
-                Mine temp = new Mine(tmpSprite, rndX, rndY);
+                Mine temp = new Mine(tmpSprite, rndX,- rndY);
                 enemies.Add(temp); //lägg till i listan
             }
             tmpSprite = Content.Load<Texture2D>("tripod");
@@ -79,7 +79,7 @@ namespace FransRymdspel
                     tmpSprite.Width);
 
                 int rndY = random.Next(0, Window.ClientBounds.Height / 2);
-                Tripod temp = new Tripod(tmpSprite, rndX, rndY);
+                Tripod temp = new Tripod(tmpSprite, rndX, -rndY);
               
                 enemies.Add(temp); //lägg till i listan
             }

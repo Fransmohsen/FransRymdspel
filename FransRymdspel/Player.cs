@@ -39,19 +39,27 @@ namespace FransRymdspel
                 texture.Width
                 && vector.X >= 0) 
             {
-                if (keyboardState.IsKeyDown(Keys.Right))
-                    vector.X += speed.X;
-                if (keyboardState.IsKeyDown(Keys.Left))
-                    vector.X -= speed.X;
+                if (keyboardState.IsKeyDown(Keys.D))
+                    angle -= 0.1f;
+                if (keyboardState.IsKeyDown(Keys.A))
+                    angle += 0.1f;
+                
+
             }
+              var direction = new Vector2((float)Math.Cos(MathHelper.ToRadians(0) - angle), -(float)Math.Sin(MathHelper.ToRadians(0) - angle));
+
+
             if (vector.Y <= window.ClientBounds.Height -
                texture.Height
-               && vector.Y >= 0) ;
+               && vector.Y >= 0) 
             {
-                if (keyboardState.IsKeyDown(Keys.Down))
-                    vector.Y += speed.Y;
-                if (keyboardState.IsKeyDown(Keys.Up))
-                    vector.Y -= speed.Y;
+                if (keyboardState.IsKeyDown(Keys.S))
+                    vector -= direction*speed.Y;
+
+                if (keyboardState.IsKeyDown(Keys.W))
+                    vector += direction * speed.Y;
+                if (keyboardState.IsKeyDown(Keys.Q))
+                    vector += direction * speed.Y;
             }
             //vänster
             if (vector.X < 0)
@@ -84,8 +92,11 @@ namespace FransRymdspel
                     timeSinceLastBullet + 200) 
                 {
                     //skapa skottet
-                    Bullet temp = new Bullet(bulletTexture, vector.X +
-                        texture.Width / 2, vector.Y);
+                    Bullet temp = new Bullet(bulletTexture, vector.X /*- texture.Width / 4 +
+                          texture.Height / 4*/, vector.Y
+                          , direction);
+
+
                     bullets.Add(temp); //lägg skott i listan
                     //sätt TimeSinceLastBullet till detat ögonblicket:
                     timeSinceLastBullet = gameTime.TotalGameTime.TotalMilliseconds;
@@ -109,7 +120,9 @@ namespace FransRymdspel
         }
         public override void  Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(texture, vector, Color.White);
+            spriteBatch.Draw(texture, vector, null, Color.White, angle + (float)Math.PI / 2,
+                    new Vector2(texture.Width / 2, texture.Height / 2), 1.0f, SpriteEffects.None, 0);
+
             foreach (Bullet b in bullets)
                 b.Draw(spriteBatch);
         }
@@ -120,15 +133,27 @@ namespace FransRymdspel
     //skapa skott
     class Bullet : PhysicalObject
     {
+        Vector2 direction;
+        
+       
+       
+
+
         //skapa skott objetkt  
-        public Bullet(Texture2D texture, float X, float Y)
-       : base(texture, X, Y, 0f, 3f)
+        public Bullet(Texture2D texture, float X, float Y, Vector2 direction)
+       : base(texture, X, Y, 3f, 3f)
         {
+            this.direction = direction;
+           
+            
+            
+            
+            
         }
         //bullet uppdate
         public void Update()
         {
-            vector.Y -= speed.Y;
+            vector+=direction*speed;
             if (vector.Y < 0)
                 isAlive = false;
         }
